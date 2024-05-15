@@ -4,6 +4,7 @@
 
 const std = @import("std");
 
+const debug = @import("debug.zig");
 const random = @import("random.zig");
 const wordlist = @import("wordlist.zig");
 
@@ -13,7 +14,6 @@ const program_version = "0.3.0";
 const CLIOptions = struct {
     version: bool = false,
     help: bool = false,
-    args: bool = false,
     list: bool = false,
 };
 
@@ -59,9 +59,6 @@ pub fn main() !void {
                 cli_options.list = true;
             }
 
-            if (std.mem.eql(u8, arg, "--args")) {
-                cli_options.args = true;
-            }
             if (std.mem.eql(u8, arg, "--debug")) {
                 gen_options.debug = true;
             }
@@ -98,24 +95,20 @@ pub fn main() !void {
 
     try wordlist.populate(&dict);
 
-    if (cli_options.args) {
-        args_index = 0;
-        std.debug.print("CLI args ({d}):\n", .{args.len});
-        for(args) |arg| {
-            if (args_index == 0) {
-                std.debug.print("    [{d}] Program name: '{s}'\n", .{args_index, arg});
-            }
-            else {
-                std.debug.print("    [{d}] Argument: '{s}'\n", .{args_index, arg});
-            }
-            args_index += 1;
-        }
-    }
-
-    if (cli_options.version) {
+    if (cli_options.version or gen_options.debug) {
         try stdout.print("{s} v{s}\n", .{program_name, program_version});
         try bw.flush();
-        return;
+        if (cli_options.version) { return; }
+    }
+
+    if (gen_options.debug) {
+        args_index = 0;
+        std.debug.print("{s} CLI args ({d}):\n", .{ debug.prefix, args.len });
+        for(args) |arg| {
+            const arg_type = if (args_index == 0) "Program name" else "Argument";
+            std.debug.print("{s}   | {d} : {s: <12} : '{s}'\n", .{ debug.prefix, args_index, arg_type, arg });
+            args_index += 1;
+        }
     }
 
     if (cli_options.help) {
@@ -174,7 +167,12 @@ fn generate(dict: *wordlist.HashMap, opts: *const GenerationOptions, allocator: 
         const index: u32 = random.lookup(@truncate(i));
         const diceword: []const u8 = dict.get(index).?;
         if (opts.indexed) {
-            try stdout.print("[{d}] {d} {s}\n", .{i+1, index, diceword});
+            if (opts.count > 9) {
+                try stdout.print("[{d: >2}] {d} {s}\n", .{i+1, index, diceword});
+            }
+            else {
+                try stdout.print("[{d}] {d} {s}\n", .{i+1, index, diceword});
+            }
         }
         else {
             if (i > 0 and opts.spaced) {

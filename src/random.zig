@@ -66,7 +66,7 @@ pub fn gen_from_web(dice_count: u8, allocator: std.mem.Allocator, show_debug: bo
             if (std.mem.eql(u8, header.name, "Date") or
                 std.mem.eql(u8, header.name, "Content-Type") or
                 std.mem.eql(u8, header.name, "Content-Length")) {
-                std.debug.print("{s} | {s} : {s}\n", .{ debug.prefix, header.name, header.value });
+                std.debug.print("{s}   | {s: <14} : {s}\n", .{ debug.prefix, header.name, header.value });
             }
         }
     }
