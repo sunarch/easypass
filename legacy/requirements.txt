@@ -1,3 +1,0 @@
-codetiming == 1.4.0
-libmonty-logging == 0.1.1
-xdg-base-dirs == 6.0.0

@@ -3,6 +3,12 @@ easypass
 
 A simple program to create passphrases from diceware wordlists.
 
+## status
+
+- Currently only using the built-in pseudo-random number generator.
+
+### planned
+
 Example to get random dice throws from:
 [Random.org 50x(1-6)c5b10fPrN](https://www.random.org/integers/?num=50&min=1&max=6&col=5&base=10&format=plain&rnd=new)
 
