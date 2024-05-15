@@ -45,51 +45,55 @@ pub fn main() !void {
 
     var args_index: u8 = 0;
     for(args) |arg| {
-        if (args_index != 0) {
-            if (std.mem.eql(u8, arg, "-v") or
-                std.mem.eql(u8, arg, "--version")) {
-                cli_options.version = true;
-            }
-            if (std.mem.eql(u8, arg, "-h") or
-                std.mem.eql(u8, arg, "--help")) {
-                cli_options.help = true;
-            }
-            if (std.mem.eql(u8, arg, "-l") or
-            std.mem.eql(u8, arg, "--list")) {
-                cli_options.list = true;
-            }
-
-            if (std.mem.eql(u8, arg, "--debug")) {
-                gen_options.debug = true;
-            }
-
-            if (std.mem.eql(u8, arg, "-w") or
-                std.mem.eql(u8, arg, "--web")) {
-                gen_options.web = true;
-            }
-            if (std.mem.eql(u8, arg, "-i") or
-                std.mem.eql(u8, arg, "--indexed")) {
-                gen_options.indexed = true;
-            }
-            if (std.mem.eql(u8, arg, "-s") or
-                std.mem.eql(u8, arg, "--spaced")) {
-                gen_options.spaced = true;
-            }
-
-            if (std.mem.eql(u8, arg, "-c6"))  { gen_options.count =  6; }
-            if (std.mem.eql(u8, arg, "-c7"))  { gen_options.count =  7; }
-            if (std.mem.eql(u8, arg, "-c8"))  { gen_options.count =  8; }
-            if (std.mem.eql(u8, arg, "-c9"))  { gen_options.count =  9; }
-            if (std.mem.eql(u8, arg, "-c10")) { gen_options.count = 10; }
-            if (std.mem.eql(u8, arg, "-c11")) { gen_options.count = 11; }
-            if (std.mem.eql(u8, arg, "-c12")) { gen_options.count = 12; }
-
-            if (std.mem.eql(u8, arg, "-wAGR"))    { try wordlist.set_wordlist(.wordlist_agr_en_original); }
-            if (std.mem.eql(u8, arg, "-wAGRalt")) { try wordlist.set_wordlist(.wordlist_agr_en_alt); }
-            if (std.mem.eql(u8, arg, "-wEFF"))    { try wordlist.set_wordlist(.wordlist_eff_large); }
-            if (std.mem.eql(u8, arg, "-wEFFs1"))  { try wordlist.set_wordlist(.wordlist_eff_short_1); }
-            if (std.mem.eql(u8, arg, "-wEFFs2"))  { try wordlist.set_wordlist(.wordlist_eff_short_2_0); }
+        if (args_index == 0) {
+            args_index += 1;
+            continue;
         }
+
+        if (std.mem.eql(u8, arg, "-v") or
+            std.mem.eql(u8, arg, "--version")) {
+            cli_options.version = true;
+        }
+        if (std.mem.eql(u8, arg, "-h") or
+            std.mem.eql(u8, arg, "--help")) {
+            cli_options.help = true;
+        }
+        if (std.mem.eql(u8, arg, "-l") or
+        std.mem.eql(u8, arg, "--list")) {
+            cli_options.list = true;
+        }
+
+        if (std.mem.eql(u8, arg, "--debug")) {
+            gen_options.debug = true;
+        }
+
+        if (std.mem.eql(u8, arg, "-w") or
+            std.mem.eql(u8, arg, "--web")) {
+            gen_options.web = true;
+        }
+        if (std.mem.eql(u8, arg, "-i") or
+            std.mem.eql(u8, arg, "--indexed")) {
+            gen_options.indexed = true;
+        }
+        if (std.mem.eql(u8, arg, "-s") or
+            std.mem.eql(u8, arg, "--spaced")) {
+            gen_options.spaced = true;
+        }
+
+        if (std.mem.eql(u8, arg, "-c6"))  { gen_options.count =  6; }
+        if (std.mem.eql(u8, arg, "-c7"))  { gen_options.count =  7; }
+        if (std.mem.eql(u8, arg, "-c8"))  { gen_options.count =  8; }
+        if (std.mem.eql(u8, arg, "-c9"))  { gen_options.count =  9; }
+        if (std.mem.eql(u8, arg, "-c10")) { gen_options.count = 10; }
+        if (std.mem.eql(u8, arg, "-c11")) { gen_options.count = 11; }
+        if (std.mem.eql(u8, arg, "-c12")) { gen_options.count = 12; }
+
+        if (std.mem.eql(u8, arg, "-wAGR"))    { try wordlist.set_wordlist(.wordlist_agr_en_original); }
+        if (std.mem.eql(u8, arg, "-wAGRalt")) { try wordlist.set_wordlist(.wordlist_agr_en_alt); }
+        if (std.mem.eql(u8, arg, "-wEFF"))    { try wordlist.set_wordlist(.wordlist_eff_large); }
+        if (std.mem.eql(u8, arg, "-wEFFs1"))  { try wordlist.set_wordlist(.wordlist_eff_short_1); }
+        if (std.mem.eql(u8, arg, "-wEFFs2"))  { try wordlist.set_wordlist(.wordlist_eff_short_2_0); }
+
         args_index += 1;
     }
 
