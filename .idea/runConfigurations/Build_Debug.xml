@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Build Debug" type="ZIGBRAINS_BUILD" factoryName="ZIGBRAINS_BUILD">
+    <ZigBrainsOption name="workingDirectory" value="$PROJECT_DIR$" />
+    <ZigBrainsArrayOption name="buildSteps" />
+    <ZigBrainsArrayOption name="extraArgs">
+      <ZigBrainsArrayEntry value="-Doptimize=Debug" />
+    </ZigBrainsArrayOption>
+    <ZigBrainsOption name="colored" value="true" />
+    <method v="2" />
+  </configuration>
+</component>

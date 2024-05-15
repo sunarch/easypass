@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Test random" type="ZIGBRAINS_TEST" factoryName="ZIGBRAINS_TEST">
+    <ZigBrainsOption name="workingDirectory" value="$PROJECT_DIR$" />
+    <ZigBrainsOption name="filePath" value="$PROJECT_DIR$/src/random.zig" />
+    <ZigBrainsNestedOption name="optimization">
+      <ZigBrainsOption name="level" value="Debug" />
+      <ZigBrainsOption name="forced" value="false" />
+    </ZigBrainsNestedOption>
+    <ZigBrainsOption name="colored" value="true" />
+    <method v="2" />
+  </configuration>
+</component>
