@@ -8,19 +8,21 @@ const random = @import("random.zig");
 const wordlist = @import("wordlist.zig");
 
 const program_name = "easypass";
-const program_version = "0.2.0";
+const program_version = "0.3.0";
 
 const CLIOptions = struct {
-    version: bool,
-    help: bool,
-    args: bool,
-    list: bool,
+    version: bool = false,
+    help: bool = false,
+    args: bool = false,
+    list: bool = false,
 };
 
 const GenerationOptions = struct {
-    count: u8,
-    indexed: bool,
-    spaced: bool,
+    debug: bool = false,
+    web: bool = false,
+    count: u8 = 6,
+    indexed: bool = false,
+    spaced: bool = false,
 };
 
 pub fn main() !void {
@@ -35,17 +37,8 @@ pub fn main() !void {
     var dict = wordlist.HashMap.init(allocator);
     defer dict.deinit();
 
-    var cli_options: CLIOptions = .{
-        .version = false,
-        .help = false,
-        .args = false,
-        .list = false,
-    };
-    var gen_options: GenerationOptions = .{
-        .count = 6,
-        .indexed = false,
-        .spaced = false,
-    };
+    var cli_options: CLIOptions = .{};
+    var gen_options: GenerationOptions = .{};
 
     const args = try std.process.argsAlloc(allocator);
     defer std.process.argsFree(allocator, args);
@@ -61,12 +54,21 @@ pub fn main() !void {
                 std.mem.eql(u8, arg, "--help")) {
                 cli_options.help = true;
             }
+            if (std.mem.eql(u8, arg, "-l") or
+            std.mem.eql(u8, arg, "--list")) {
+                cli_options.list = true;
+            }
+
             if (std.mem.eql(u8, arg, "--args")) {
                 cli_options.args = true;
             }
-            if (std.mem.eql(u8, arg, "-l") or
-                std.mem.eql(u8, arg, "--list")) {
-                cli_options.list = true;
+            if (std.mem.eql(u8, arg, "--debug")) {
+                gen_options.debug = true;
+            }
+
+            if (std.mem.eql(u8, arg, "-w") or
+                std.mem.eql(u8, arg, "--web")) {
+                gen_options.web = true;
             }
             if (std.mem.eql(u8, arg, "-i") or
                 std.mem.eql(u8, arg, "--indexed")) {
@@ -124,7 +126,8 @@ pub fn main() !void {
         try stdout.print("\n", .{});
         try stdout.print("\n", .{});
         try stdout.print("Debug options:\n", .{});
-        try stdout.print("  --args  Show CLI args before output\n", .{});
+        try stdout.print("  --args   Show CLI args before output\n", .{});
+        try stdout.print("  --debug  Show debug output\n", .{});
         try stdout.print("Display options:\n", .{});
         try stdout.print("  -i --indexed  Display as table with diceword indexes\n", .{});
         try stdout.print("  -s --spaced   Add spaces between words\n", .{});
@@ -138,6 +141,9 @@ pub fn main() !void {
         try stdout.print("  -wEFF     EFF (Electronic Frontier Foundation) - large\n", .{});
         try stdout.print("  -wEFFs1   EFF (Electronic Frontier Foundation) - short 1\n", .{});
         try stdout.print("  -wEFFs2   EFF (Electronic Frontier Foundation) - short 2.0\n", .{});
+        try stdout.print("\n", .{});
+        try stdout.print("Other options:\n", .{});
+        try stdout.print("  -w --web  Get random numbers from Random.org\n", .{});
         try bw.flush();
         return;
     }
@@ -149,21 +155,21 @@ pub fn main() !void {
 
     try bw.flush();
 
-    try generate(&dict, &gen_options);
+    try generate(&dict, &gen_options, allocator);
 }
 
-fn generate(dict: *wordlist.HashMap, opts: *const GenerationOptions) !void {
+fn generate(dict: *wordlist.HashMap, opts: *const GenerationOptions, allocator: std.mem.Allocator) !void {
     const stdout_file = std.io.getStdOut().writer();
     var bw = std.io.bufferedWriter(stdout_file);
     const stdout = bw.writer();
 
+    switch (opts.web) {
+        false => try random.gen_from_prng(wordlist.get_dice_count()),
+        true => try random.gen_from_web(wordlist.get_dice_count(), allocator, opts.debug),
+    }
+
     for (0..opts.count) |i| {
-        var factor: u32 = 1;
-        var index: u32 = 0;
-        for (0..wordlist.get_dice_count()) |_| {
-            index += random.dieroll() * factor;
-            factor *= 10;
-        }
+        const index: u32 = random.lookup(@truncate(i));
         const diceword: []const u8 = dict.get(index).?;
         if (opts.indexed) {
             try stdout.print("[{d}] {d} {s}\n", .{i+1, index, diceword});

@@ -31,20 +31,20 @@ pub fn get_dice_count() u8 {
 }
 
 pub fn populate(dict: *HashMap) !void {
-    var it1 = switch (wordlist) {
+    var it_lines = switch (wordlist) {
         .wordlist_agr_en_original => std.mem.split(u8, raw_agr_en_original, "\n"),
         .wordlist_agr_en_alt => std.mem.split(u8, raw_agr_en_alt, "\n"),
         .wordlist_eff_large => std.mem.split(u8, raw_eff_large, "\n"),
         .wordlist_eff_short_1 => std.mem.split(u8, raw_eff_short_1, "\n"),
         .wordlist_eff_short_2_0 => std.mem.split(u8, raw_eff_short_2_0, "\n"),
     };
-    while (it1.next()) |x| {
-        if (x.len == 0) { continue; }
-        var it2 = std.mem.split(u8, x, "\t");
-        const key_str = it2.next().?;
+    while (it_lines.next()) |line| {
+        if (line.len == 0) { continue; }
+        var it_elements = std.mem.split(u8, line, "\t");
+        const key_str = it_elements.next().?;
         dice_count = @truncate(key_str.len);
         const key = try std.fmt.parseInt(u32, key_str, 10);
-        const value = it2.next().?;
+        const value = it_elements.next().?;
         try dict.put(key, value);
     }
 }
