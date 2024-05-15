@@ -7,8 +7,8 @@ const http = std.http;
 
 const debug = @import("debug.zig");
 
-const MAX_WORDS: u8 = 10;
-var indexes: [MAX_WORDS]u32 = .{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const MAX_WORDS: u8 = 12;
+var indexes: [MAX_WORDS]u32 = .{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 pub fn lookup(word_index: u8) u32 {
     return indexes[word_index];

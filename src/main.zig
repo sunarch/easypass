@@ -84,6 +84,8 @@ pub fn main() !void {
             if (std.mem.eql(u8, arg, "-c8"))  { gen_options.count =  8; }
             if (std.mem.eql(u8, arg, "-c9"))  { gen_options.count =  9; }
             if (std.mem.eql(u8, arg, "-c10")) { gen_options.count = 10; }
+            if (std.mem.eql(u8, arg, "-c11")) { gen_options.count = 11; }
+            if (std.mem.eql(u8, arg, "-c12")) { gen_options.count = 12; }
 
             if (std.mem.eql(u8, arg, "-wAGR"))    { try wordlist.set_wordlist(.wordlist_agr_en_original); }
             if (std.mem.eql(u8, arg, "-wAGRalt")) { try wordlist.set_wordlist(.wordlist_agr_en_alt); }
@@ -133,7 +135,7 @@ pub fn main() !void {
         try stdout.print("  -s --spaced   Add spaces between words\n", .{});
         try stdout.print("\n", .{});
         try stdout.print("Counts:\n", .{});
-        try stdout.print("  -c6 (default) | -c7 | -c8 | -c9 | -c10\n", .{});
+        try stdout.print("  -c6 (default) | -c7 | -c8 | -c9 | -c10 | -c11 | -c12\n", .{});
         try stdout.print("\n", .{});
         try stdout.print("Word lists:\n", .{});
         try stdout.print("  -wAGR     original (Arnold G. Reinhold), English", .{});
