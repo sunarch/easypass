@@ -73,7 +73,7 @@ pub fn gen_from_web(dice_count: u8, allocator: std.mem.Allocator, show_debug: bo
     try std.testing.expectEqual(req.response.status, .ok);
 
     var rdr = req.reader();
-    const body = try rdr.readAllAlloc(allocator, 1024 * 1024 * 4);
+    const body = try rdr.readAllAlloc(allocator, 1024);
     defer allocator.free(body);
 
     var index_words: u8 = 0;
